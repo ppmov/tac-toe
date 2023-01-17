@@ -32,13 +32,11 @@ public class AI
         {
             isFirstTurn = false;
 
-            // на первом ходу пытаемся сходить в центр
             var cell = SelectMiddleCell();
 
             if (cell != null)
                 return cell;
 
-            // если не получилось - ходим в рандомный угол
             var diagonal = Random.Range(0, 2) == 0 ? TTT.grid.MainDiagonal : TTT.grid.AntiDiagonal;
             return diagonal[Random.Range(0, 2) == 0 ? 0 : TTT.grid.Size - 1];
         }
