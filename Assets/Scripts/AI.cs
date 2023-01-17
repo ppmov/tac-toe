@@ -1,6 +1,7 @@
 using System.Linq;
 using UnityEngine;
 using TicTacToe;
+using System.Collections.Generic;
 
 public class AI
 {
@@ -60,14 +61,30 @@ public class AI
         var hisFirstAlmostFullLine = hisLines.FirstOrDefault(x => Controller.GetLineState(x) == LineState.AlmostFull);
 
         if (hisFirstAlmostFullLine != null)
-            return hisFirstAlmostFullLine .Where(x => x.Sign == null).SingleOrDefault();
+            return hisFirstAlmostFullLine.Where(x => x.Sign == null).SingleOrDefault();
 
-        // выбирается линия, на которой больше всего занятых позиций
+        // выбирается позиция, забрав которую, противник будет претендовать сразу на две линии
+        var enemyBarelyFullLines = hisLines.Where(x => Controller.GetLineState(x) == LineState.BarelyFull).Where(l => l.Count(x => x.Sign == null) == 2).ToArray();
+
+        if (enemyBarelyFullLines.Length > 1)
+        {
+            for (int i = 0; i < enemyBarelyFullLines.Length; i++)
+                for (int j = i + 1; j < enemyBarelyFullLines.Length; j++)
+                {
+                    var intersect = enemyBarelyFullLines[i].Intersect(enemyBarelyFullLines[j]).Where(x => x.Sign == null).FirstOrDefault();
+
+                    if (intersect != null)
+                        return intersect;
+                }
+        }
+
+        // выбирается линия, на которой больше всего своих занятых позиций
         var myFirstBarelyFullLine = myLines.Where(x => Controller.GetLineState(x) == LineState.BarelyFull).OrderBy(l => l.Count(x => x.Sign == null)).FirstOrDefault();
 
         if (myFirstBarelyFullLine != null)
             return myFirstBarelyFullLine.Where(x => x.Sign == null).FirstOrDefault();
 
+        // случайный ход
         return SelectRandomCell();
     }
 
