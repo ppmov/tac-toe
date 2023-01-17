@@ -51,19 +51,19 @@ public class AI
         var myLines = sign == Sign.X ? xLines : oLines;
         var hisLines = sign == Sign.X ? oLines : xLines;
 
-        // выбираются линии, на которых почти достигнута победа
+        // select almost win cell
         var myFirstAlmostFullLine = myLines.FirstOrDefault(x => Controller.GetLineState(x) == LineState.AlmostFull);
 
         if (myFirstAlmostFullLine != null)
             return myFirstAlmostFullLine.Where(x => x.Sign == null).SingleOrDefault();
 
-        // выбираются линии, на которых почти победил противоположный игрок
+        // select enemy almost win cell
         var hisFirstAlmostFullLine = hisLines.FirstOrDefault(x => Controller.GetLineState(x) == LineState.AlmostFull);
 
         if (hisFirstAlmostFullLine != null)
             return hisFirstAlmostFullLine.Where(x => x.Sign == null).SingleOrDefault();
 
-        // выбирается позиция, забрав которую, противник будет претендовать сразу на две линии
+        // select enemy intersect cell
         var enemyBarelyFullLines = hisLines.Where(x => Controller.GetLineState(x) == LineState.BarelyFull).Where(l => l.Count(x => x.Sign == null) == 2).ToArray();
 
         if (enemyBarelyFullLines.Length > 1)
@@ -78,13 +78,13 @@ public class AI
                 }
         }
 
-        // выбирается линия, на которой больше всего своих занятых позиций
+        // select most potential for win cell
         var myFirstBarelyFullLine = myLines.Where(x => Controller.GetLineState(x) == LineState.BarelyFull).OrderBy(l => l.Count(x => x.Sign == null)).FirstOrDefault();
 
         if (myFirstBarelyFullLine != null)
             return myFirstBarelyFullLine.Where(x => x.Sign == null).FirstOrDefault();
 
-        // случайный ход
+        // select random cell
         return SelectRandomCell();
     }
 

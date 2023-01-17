@@ -75,14 +75,14 @@ public class GameFieldAdapter : MonoBehaviour
         var obj = Instantiate(style.line, transform);
         var rect = obj.GetComponent<RectTransform>();
 
-        // лини€ ставитс€ между кнопками
+        // put line between cells
         rect.anchoredPosition = (from.anchoredPosition + to.anchoredPosition) / 2f;
 
-        // поворот линии исход€ из позиций кнопок
+        // rotate line
         var angle = Vector2.Angle(-Vector2.right, to.anchoredPosition - from.anchoredPosition);
         rect.Rotate(Vector3.forward, angle);
 
-        // длина линии равна рассто€нию между кнопками + среднему размеру кнопки
+        // line length = distance between cells + average cell size
         var averageButtonSize = (to.sizeDelta.x + to.sizeDelta.y) / 2f;
         rect.sizeDelta = new Vector2(Vector2.Distance(from.anchoredPosition, to.anchoredPosition) + averageButtonSize, rect.sizeDelta.y);
     }

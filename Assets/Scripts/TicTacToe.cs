@@ -21,7 +21,6 @@ namespace TicTacToe
         public Sign Lead { get; private set; }
         public bool IsPlaying { get; private set; }
 
-        //public event Action PlayEvent;
         public event Action TurnEvent;
         public event Action<Sign?> FinishEvent;
 
